@@ -1,0 +1,22 @@
+version: '3.6'
+
+services:
+    fe-e2e:
+        build:
+            context: .
+            dockerfile: Dockerfile-e2e
+        ports: 
+            - 3000:3000
+
+    cypress:
+        image: "cypress/included:3.2.0"
+        depends_on:
+            - fe-e2e
+        environment:
+            # pass base url to test pointing at the web application
+            - CYPRESS_baseUrl=http://localhost:3000
+        working_dir: /fe-e2e
+        volumes:
+            - ./fe-e2e:/fe-e2e
+        # Able access localhost
+        network_mode: 'host'

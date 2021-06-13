@@ -4,4 +4,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "My first workflow"
+      - uses: actions/checkout@
+      - name: e2e-test
+        run: docker-compose up --build --exit-code-from cypress 

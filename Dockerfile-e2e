@@ -1,0 +1,29 @@
+FROM node:12-alpine as builder
+
+ENV NODE_ENV build
+
+WORKDIR /home/node/back-end
+COPY ./be-e2e /home/node/back-end
+RUN npm install && npm run build
+
+WORKDIR /home/node/front-end
+COPY ./fe-e2e /home/node/front-end
+RUN npm install && npm ci && npm run build
+
+# --- production below ---
+
+FROM node:12-alpine
+
+ENV NODE_ENV production
+
+WORKDIR /home/node/back-end
+
+COPY --from=builder /home/node/back-end/package*.json /home/node/back-end/
+COPY --from=builder /home/node/back-end/tsconfig.build.json /home/node/back-end/
+COPY --from=builder /home/node/back-end/dist/ /home/node/back-end/dist/
+
+COPY --from=builder /home/node/front-end/dist/ /home/node/front-end/dist/
+
+RUN npm ci
+EXPOSE 3000
+CMD ["node", "dist/main.js"]
