@@ -4,6 +4,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@
+      - uses: actions/checkout@v2
       - name: e2e-test
         run: docker-compose up --build --exit-code-from cypress 
