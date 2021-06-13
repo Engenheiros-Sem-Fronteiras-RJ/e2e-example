@@ -5,7 +5,7 @@ describe('My First Test', () => {
 
     it('Check title', () => {
       cy.get('h1').then(e => {
-          expect(e.text()).be.equal(' app is running!!')
+          expect(e.text()).be.equal(' app is running!')
       })
     })
 
